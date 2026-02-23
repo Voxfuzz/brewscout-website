@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrewScout — Your Indie Coffee Is Out There</title>
+  <meta name="description" content="Find independent coffee shops near you, anywhere in the world. BrewScout helps you discover indie cafes with vibe tags, reviews, and offline support.">
+  <meta property="og:title" content="BrewScout — Your Indie Coffee Is Out There">
+  <meta property="og:description" content="Find independent coffee shops near you, anywhere in the world.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://getbrewscout.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --espresso: #3B2F2F;
+      --cream: #F7F3EE;
+      --copper: #C47A4A;
+      --sage: #8FAF9B;
+      --slate: #4A5A6A;
+      --warm-white: #FFFDF9;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--espresso);
+      background-color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      background: rgba(59, 47, 47, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 16px 0;
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: var(--cream);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--copper); }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-cta {
+      background: var(--copper) !important;
+      padding: 8px 20px;
+      border-radius: 24px;
+      opacity: 1 !important;
+      font-weight: 600 !important;
+      transition: transform 0.2s !important;
+    }
+    .nav-cta:hover { transform: scale(1.05); }
+
+    /* HERO */
+    .hero {
+      background: var(--espresso);
+      padding: 140px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 50%, rgba(196, 122, 74, 0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 50%, rgba(143, 175, 155, 0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-content {
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(196, 122, 74, 0.15);
+      color: var(--copper);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 56px;
+      color: var(--cream);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--copper); }
+    .hero p {
+      font-size: 20px;
+      color: rgba(247, 243, 238, 0.7);
+      line-height: 1.6;
+      margin-bottom: 36px;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .btn-primary { background: var(--copper); color: white; }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: var(--cream); border: 1px solid rgba(255,255,255,0.2); }
+    .btn-icon { font-size: 20px; }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-top: 48px;
+      padding-top: 36px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .stat { text-align: center; }
+    .stat-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: var(--copper);
+    }
+    .stat-label {
+      font-size: 13px;
+      color: rgba(247, 243, 238, 0.5);
+      margin-top: 4px;
+    }
+
+    /* FEATURES */
+    .features {
+      padding: 100px 24px;
+      background: var(--warm-white);
+    }
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .section-label {
+      display: inline-block;
+      color: var(--copper);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 40px;
+      color: var(--espresso);
+      line-height: 1.2;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    .feature-card {
+      background: white;
+      border-radius: 20px;
+      padding: 36px 28px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(59, 47, 47, 0.08);
+    }
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin-bottom: 20px;
+    }
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--espresso);
+    }
+    .feature-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--slate);
+    }
+
+    /* HOW IT WORKS */
+    .how-it-works {
+      padding: 100px 24px;
+      background: var(--cream);
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin-top: 64px;
+    }
+    .step {
+      text-align: center;
+      position: relative;
+    }
+    .step-number {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--espresso);
+      color: var(--copper);
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .step h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--espresso);
+    }
+    .step p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--slate);
+      max-width: 280px;
+      margin: 0 auto;
+    }
+
+    /* VIBES */
+    .vibes {
+      padding: 80px 24px;
+      background: var(--espresso);
+      text-align: center;
+    }
+    .vibes .section-title { color: var(--cream); }
+    .vibes-subtitle {
+      color: rgba(247, 243, 238, 0.6);
+      font-size: 18px;
+      margin-top: 12px;
+      margin-bottom: 40px;
+    }
+    .vibe-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .vibe-tag {
+      background: rgba(255,255,255,0.08);
+      color: var(--cream);
+      padding: 10px 20px;
+      border-radius: 24px;
+      font-size: 15px;
+      font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.2s;
+    }
+    .vibe-tag:hover { background: rgba(196, 122, 74, 0.2); }
+
+    /* SCREENSHOTS */
+    .screenshots {
+      padding: 100px 24px;
+      background: var(--warm-white);
+      text-align: center;
+    }
+    .screenshot-placeholder {
+      max-width: 900px;
+      margin: 48px auto 0;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .phone-frame {
+      width: 220px;
+      height: 440px;
+      background: var(--espresso);
+      border-radius: 28px;
+      padding: 12px;
+      box-shadow: 0 16px 48px rgba(59, 47, 47, 0.15);
+    }
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: var(--cream);
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--slate);
+      text-align: center;
+      padding: 16px;
+    }
+    .phone-screen .screen-emoji { font-size: 40px; margin-bottom: 12px; }
+    .phone-screen .screen-label { font-weight: 600; color: var(--espresso); }
+
+    /* DOWNLOAD CTA */
+    .download {
+      padding: 100px 24px;
+      background: var(--espresso);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .download::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 50% 50%, rgba(196, 122, 74, 0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .download-content {
+      position: relative;
+      z-index: 1;
+    }
+    .download h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 44px;
+      color: var(--cream);
+      margin-bottom: 16px;
+    }
+    .download p {
+      font-size: 18px;
+      color: rgba(247, 243, 238, 0.6);
+      margin-bottom: 36px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .download-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* FOOTER */
+    footer {
+      background: #2A2020;
+      padding: 48px 24px;
+      text-align: center;
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .footer-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--cream);
+      margin-bottom: 8px;
+    }
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--copper);
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: rgba(247, 243, 238, 0.5);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--copper); }
+    .footer-copy {
+      font-size: 13px;
+      color: rgba(247, 243, 238, 0.3);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 36px; }
+      .hero p { font-size: 17px; }
+      .hero-stats { gap: 24px; }
+      .stat-value { font-size: 22px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; gap: 32px; }
+      .section-title { font-size: 32px; }
+      .phone-frame { width: 180px; height: 360px; }
+      .download h2 { font-size: 32px; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .hero { padding: 120px 20px 60px; }
+      .hero h1 { font-size: 30px; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .hero-stats { flex-direction: column; gap: 16px; }
+      .screenshot-placeholder { gap: 16px; }
+      .phone-frame { width: 150px; height: 300px; }
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-content { animation: fadeUp 0.8s ease-out; }
+    .feature-card { animation: fadeUp 0.6s ease-out backwards; }
+    .feature-card:nth-child(1) { animation-delay: 0.1s; }
+    .feature-card:nth-child(2) { animation-delay: 0.2s; }
+    .feature-card:nth-child(3) { animation-delay: 0.3s; }
+    .feature-card:nth-child(4) { animation-delay: 0.4s; }
+    .feature-card:nth-child(5) { animation-delay: 0.5s; }
+    .feature-card:nth-child(6) { animation-delay: 0.6s; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">☕ Brew<span>Scout</span></a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#download">Download</a>
+        <a href="/privacy-policy.html">Privacy</a>
+        <a href="#download" class="nav-cta">Get the App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Free on iOS &amp; Android</div>
+      <h1>Your Indie Coffee<br>Is <span>Out There</span></h1>
+      <p>Discover independent, locally-owned coffee shops wherever you are in the world. Ditch the chains. Find your new favorite spot.</p>
+      <div class="hero-buttons">
+        <a href="#download" class="btn btn-primary">
+          <span class="btn-icon">▶</span> Download Now
+        </a>
+        <a href="#features" class="btn btn-secondary">
+          <span class="btn-icon">☕</span> Learn More
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-value">Global</div>
+          <div class="stat-label">Coverage worldwide</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">Free</div>
+          <div class="stat-label">No ads, ever</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">Offline</div>
+          <div class="stat-label">Works without WiFi</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Everything you need to find<br>your perfect cup</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #FDF0E6;">🗺️</div>
+          <h3>Smart Map</h3>
+          <p>Color-coded pins show indie vs. chain shops at a glance. Tap any pin for instant details, distance, and vibe tags.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #E8F0E6;">🏠</div>
+          <h3>Indie First</h3>
+          <p>Chains are filtered out by default. BrewScout champions independent coffee shops — the ones with character and heart.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #E6EBF0;">🌿</div>
+          <h3>Vibe Tags</h3>
+          <p>See what makes each shop special — outdoor seating, WiFi, dog friendly, vegan options, and more — before you visit.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #F0E6E6;">📴</div>
+          <h3>Works Offline</h3>
+          <p>Your favorites and recent searches are cached locally. No signal? No problem. Your coffee spots are always accessible.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #F0ECE6;">⭐</div>
+          <h3>Reviews &amp; Photos</h3>
+          <p>See real photos, ratings, and reviews enriched by Google. Know exactly what to expect before you walk in.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #E6F0EE;">📤</div>
+          <h3>Share &amp; Report</h3>
+          <p>Share your favorite finds with friends. Found a closed shop or a hidden gem? Report it and help the community.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-title">Three taps to better coffee</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Open BrewScout</h3>
+          <p>The app instantly finds your location and loads indie coffee shops nearby. No signup required.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Explore &amp; Filter</h3>
+          <p>Browse the map or discover list. Filter by indie, all shops, or nearest. Check vibe tags to find your perfect match.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Go Get Coffee</h3>
+          <p>Tap for directions, save to favorites, or share with a friend. Your next great cup is just around the corner.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIBES -->
+  <section class="vibes">
+    <div class="section-inner">
+      <h2 class="section-title">Find your vibe</h2>
+      <p class="vibes-subtitle">Every shop tells a story. Vibe tags help you find yours.</p>
+      <div class="vibe-tags">
+        <span class="vibe-tag">🌿 Outdoor Seating</span>
+        <span class="vibe-tag">📶 Free WiFi</span>
+        <span class="vibe-tag">🐕 Dog Friendly</span>
+        <span class="vibe-tag">🌱 Vegan Options</span>
+        <span class="vibe-tag">🍳 Breakfast</span>
+        <span class="vibe-tag">🧁 Pastries</span>
+        <span class="vibe-tag">☕ Takeaway</span>
+        <span class="vibe-tag">♿ Accessible</span>
+        <span class="vibe-tag">💵 Cash OK</span>
+        <span class="vibe-tag">🚭 No Smoking</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREENSHOTS -->
+  <section class="screenshots" id="screenshots">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-label">See It In Action</div>
+        <h2 class="section-title">Beautiful, simple, fast</h2>
+      </div>
+      <div class="screenshot-placeholder">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="screen-emoji">🗺️</div>
+            <div class="screen-label">Map View</div>
+            <p style="font-size: 11px; margin-top: 8px; color: var(--slate);">Color-coded pins for indie &amp; chain shops</p>
+          </div>
+        </div>
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="screen-emoji">☕</div>
+            <div class="screen-label">Discover</div>
+            <p style="font-size: 11px; margin-top: 8px; color: var(--slate);">Browse shops with vibe tags &amp; filters</p>
+          </div>
+        </div>
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="screen-emoji">❤️</div>
+            <div class="screen-label">Favorites</div>
+            <p style="font-size: 11px; margin-top: 8px; color: var(--slate);">Save your go-to spots for quick access</p>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top: 24px; font-size: 14px; color: var(--slate);">Replace these placeholders with real app screenshots</p>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD CTA -->
+  <section class="download" id="download">
+    <div class="download-content">
+      <h2>Ready to find<br>your next favorite?</h2>
+      <p>Download BrewScout for free and start discovering indie coffee shops today.</p>
+      <div class="download-buttons">
+        <a href="#" class="btn btn-primary">
+          <span class="btn-icon">▶</span> Google Play
+        </a>
+        <a href="#" class="btn btn-secondary">
+          <span class="btn-icon">🍎</span> App Store
+        </a>
+      </div>
+      <p style="margin-top: 24px; font-size: 13px; color: rgba(247,243,238,0.4);">Free. No ads. No account required.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">☕ BrewScout</div>
+      <div class="footer-tagline">Your Indie Coffee Is Out There</div>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#download">Download</a>
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="mailto:brewscout.reports@gmail.com">Contact</a>
+      </div>
+      <div class="footer-copy">&copy; 2026 BrewScout. All rights reserved.</div>
+    </div>
+  </footer>
+
+</body>
+</html>
